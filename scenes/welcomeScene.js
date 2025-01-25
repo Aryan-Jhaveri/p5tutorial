@@ -16,16 +16,26 @@ class WelcomeScene {
         background(0);
         
         // Title
+        this.drawtitle();
+        
+        // Start button 
+        this.drawstartbutton();
+    }
+
+    drawtitle () {
+        // Title
         push();
         fill(255);
         textAlign(CENTER, CENTER);
         textSize(32);
         text('The Merchant Poem', windowWidth/2, windowHeight/3);
         pop();
-        
+    }
+
+    drawstartbutton () {
         // Start button
         push();
-        //fill(0);
+        fill(0);
         rect(this.startButtonX, this.startButtonY, this.buttonWidth, this.buttonHeight);
         fill(255);
         textAlign(CENTER, CENTER);
