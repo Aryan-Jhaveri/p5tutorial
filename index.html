@@ -90,26 +90,26 @@
         <div class="control__name">Life of Pi.mp3 - A.jhaveri</div>
         <button class="control__play">▶</button>
     </div>
-
+    <script src="sceneManager.js"></script>
+    <script src="scenes/welcomeScene.js"></script>
+    <script src="scenes/lastScene.js"></script>
+    <script src="scenes/journeyScene.js"></script>
     <script src="sketch.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const startButton = document.getElementById('startButton');
             const control = document.querySelector('.control');
             const playButton = document.querySelector('.control__play');
             let isPlaying = false;
 
-
-
             // Play/Pause button handler
             playButton.addEventListener('click', function() {
-                if (typeof song !== 'undefined') {
+                if (journeyScene && journeyScene.song) {
                     if (isPlaying) {
-                        song.pause();
+                        journeyScene.song.pause();
                         playButton.textContent = '▶';
                     } else {
-                        song.play();
+                        journeyScene.song.play();
                         playButton.textContent = '⏸';
                     }
                     isPlaying = !isPlaying;
@@ -119,14 +119,18 @@
             // Control bar visibility
             let timeout;
             document.addEventListener('mousemove', function() {
-                control.classList.remove('fadeout');
-                control.classList.add('fadeIn');
-                control.classList.remove('none');
-                
-                clearTimeout(timeout);
-                timeout = setTimeout(function() {
+                if (sceneManager.getCurrentScene() === sceneManager.scenes.JOURNEY) {
+                    control.classList.remove('fadeout');
+                    control.classList.add('fadeIn');
+                    control.classList.remove('none');
+                    
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function() {
+                        control.classList.add('none');
+                    }, 3000);
+                } else {
                     control.classList.add('none');
-                }, 3000);
+                }
             });
         });
     </script>

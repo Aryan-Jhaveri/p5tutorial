@@ -6,3 +6,39 @@ html, body {
 canvas {
   display: block;
 }
+
+
+/* Scene transitions */
+.scene-transition {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Welcome scene button styles */
+.start-button {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide audio controls when not in journey scene */
+.control {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.control.visible {
+  opacity: 1;
+}
