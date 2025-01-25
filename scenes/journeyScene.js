@@ -424,7 +424,7 @@ class JourneyScene {
         // Prevent default scroll behavior
         return false;
     }
-
+/** 
     windowResized() {
         this.checkDisplayMode();
         this.totalScrollHeight = (this.sections.length * windowHeight) - windowHeight;
@@ -435,4 +435,6 @@ class JourneyScene {
             this.bands[band].radiusOffset = windowWidth * (0.01 + (index * 0.07));
         });
     }
+*/
+
 }

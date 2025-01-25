@@ -2,6 +2,7 @@
 let welcomeScene;
 let journeyScene;
 let lastScene;
+let sceneManager;
 
 let fft;
 let song;
@@ -13,37 +14,40 @@ let PI;
 function setup() {
     createCanvas(windowWidth, windowHeight);
     
-    // Initialize scenes
-    welcomeScene = new WelcomeScene();
-    journeyScene = new JourneyScene();
-    lastScene = new LastScene();
+    sceneManager = new SceneManager();
     
     // Setup all scenes
-    welcomeScene.setup();
-    journeyScene.setup();
-    lastScene.setup();
+    sceneManager.welcomeScene.setup();
+    sceneManager.journeyScene.setup();
+    sceneManager.lastScene.setup();
 }
 
 function draw() {
-    // Call the appropriate scene's draw method
+
+    // Draw current scene
     switch(sceneManager.getCurrentScene()) {
         case sceneManager.scenes.WELCOME:
-            welcomeScene.draw();
+            sceneManager.welcomeScene.draw();
             break;
         case sceneManager.scenes.JOURNEY:
-            journeyScene.draw();
+            sceneManager.journeyScene.draw();
             break;
         case sceneManager.scenes.LAST:
-            lastScene.draw();
+            sceneManager.lastScene.draw();
             break;
     }
 }
 
 function mousePressed() {
-    // Forward mouse events to current scene
     switch(sceneManager.getCurrentScene()) {
         case sceneManager.scenes.WELCOME:
-            welcomeScene.mousePressed();
+            sceneManager.welcomeScene.mousePressed();
+            break;
+        case sceneManager.scenes.JOURNEY:
+            sceneManager.journeyScene.mousePressed();
+            break;
+        case sceneManager.scenes.LAST:
+            sceneManager.lastScene.mousePressed();
             break;
     }
 }

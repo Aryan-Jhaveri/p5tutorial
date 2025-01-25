@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>p5 tutorial</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12:wght@400&display=swap" rel="stylesheet">
     
     <!-- P5.js Libraries -->
     <script src="libraries/p5.min.js"></script>
@@ -92,47 +94,48 @@
     </div>
     <script src="sceneManager.js"></script>
     <script src="scenes/welcomeScene.js"></script>
-    <script src="scenes/lastScene.js"></script>
     <script src="scenes/journeyScene.js"></script>
+    <script src="scenes/lastScene.js"></script>
     <script src="sketch.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const control = document.querySelector('.control');
-            const playButton = document.querySelector('.control__play');
-            let isPlaying = false;
+    const control = document.querySelector('.control');
+    const playButton = document.querySelector('.control__play');
+    let isPlaying = false;
 
-            // Play/Pause button handler
-            playButton.addEventListener('click', function() {
-                if (journeyScene && journeyScene.song) {
-                    if (isPlaying) {
-                        journeyScene.song.pause();
-                        playButton.textContent = '▶';
-                    } else {
-                        journeyScene.song.play();
-                        playButton.textContent = '⏸';
-                    }
-                    isPlaying = !isPlaying;
-                }
-            });
+    // Updated play button handler to use SceneManager
+    playButton.addEventListener('click', function() {
+        const currentScene = sceneManager.getCurrentScene();
+        if (currentScene && currentScene.song) {
+            if (isPlaying) {
+                currentScene.song.pause();
+                playButton.textContent = '▶';
+            } else {
+                currentScene.song.play();
+                playButton.textContent = '⏸';
+            }
+            isPlaying = !isPlaying;
+        }
+    });
 
-            // Control bar visibility
-            let timeout;
-            document.addEventListener('mousemove', function() {
-                if (sceneManager.getCurrentScene() === sceneManager.scenes.JOURNEY) {
-                    control.classList.remove('fadeout');
-                    control.classList.add('fadeIn');
-                    control.classList.remove('none');
-                    
-                    clearTimeout(timeout);
-                    timeout = setTimeout(function() {
-                        control.classList.add('none');
-                    }, 3000);
-                } else {
-                    control.classList.add('none');
-                }
-            });
-        });
+    // Updated control bar visibility
+    let timeout;
+    document.addEventListener('mousemove', function() {
+        if (sceneManager.currentScene === sceneManager.scenes.JOURNEY) {
+            control.classList.remove('fadeout');
+            control.classList.add('fadeIn');
+            control.classList.remove('none');
+            
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                control.classList.add('none');
+            }, 3000);
+        } else {
+            control.classList.add('none');
+        }
+    });
+});
     </script>
 </body>
 </html>
