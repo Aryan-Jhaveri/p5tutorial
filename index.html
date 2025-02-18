@@ -5,12 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>p5 tutorial</title>
 
+    <!-- Fonts should be loaded first -->
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+12:wght@400&display=swap" rel="stylesheet">
     
-    <!-- P5.js Libraries -->
+    <!-- Load P5.js Libraries first -->
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
     
+    <!-- Load SceneManager after P5.js -->
+    <script src="libraries/scenemanager.js"></script>
+    
+    <!-- Load scene classes before main sketch -->
+    <script src="scenes/welcomeScene.js"></script>
+    <script src="scenes/journeyScene.js"></script>
+    <script src="scenes/lastScene.js"></script>
+    
+    <!-- Load main sketch last -->
+    <script src="sketch.js"></script>
+
+
     <style>
         body {
             margin: 0;
@@ -83,59 +96,56 @@
     </style>
 </head>
 <body>
-        <!-- Add container for poetry visualization -->
-    <div class="poetry-container">
-        <!-- P5.js canvas will be inserted here automatically -->
-    </div>
-    <!-- Audio controls -->
+    <div class="poetry-container"></div>
+    
     <div class="control none">
         <div class="control__name">Life of Pi.mp3 - A.jhaveri</div>
         <button class="control__play">▶</button>
     </div>
-    <script src="sceneManager.js"></script>
-    <script src="scenes/welcomeScene.js"></script>
-    <script src="scenes/journeyScene.js"></script>
-    <script src="scenes/lastScene.js"></script>
-    <script src="sketch.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const control = document.querySelector('.control');
-    const playButton = document.querySelector('.control__play');
-    let isPlaying = false;
+    document.addEventListener('DOMContentLoaded', function() {
+        const control = document.querySelector('.control');
+        const playButton = document.querySelector('.control__play');
+        let isPlaying = false;
 
-    // Updated play button handler to use SceneManager
-    playButton.addEventListener('click', function() {
-        const currentScene = sceneManager.getCurrentScene();
-        if (currentScene && currentScene.song) {
-            if (isPlaying) {
-                currentScene.song.pause();
-                playButton.textContent = '▶';
-            } else {
-                currentScene.song.play();
-                playButton.textContent = '⏸';
-            }
-            isPlaying = !isPlaying;
-        }
-    });
-
-    // Updated control bar visibility
-    let timeout;
-    document.addEventListener('mousemove', function() {
-        if (sceneManager.currentScene === sceneManager.scenes.JOURNEY) {
-            control.classList.remove('fadeout');
-            control.classList.add('fadeIn');
-            control.classList.remove('none');
+        // Audio control handling using our global mgr variable
+        playButton.addEventListener('click', function() {
+            // Access the scene manager through our global mgr variable
+            if (!window.mgr) return;
             
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
+            const currentScene = window.mgr.getCurrentScene();
+            if (currentScene && currentScene.song) {
+                if (isPlaying) {
+                    currentScene.song.pause();
+                    playButton.textContent = '▶';
+                } else {
+                    currentScene.song.play();
+                    playButton.textContent = '⏸';
+                }
+                isPlaying = !isPlaying;
+            }
+        });
+
+        // Control visibility handling
+        let timeout;
+        document.addEventListener('mousemove', function() {
+            if (!window.mgr) return;
+            
+            const currentSceneName = window.mgr.getCurrentSceneName();
+            if (currentSceneName === 'JOURNEY') {
+                control.classList.remove('fadeout', 'none');
+                control.classList.add('fadeIn');
+                
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    control.classList.add('none');
+                }, 3000);
+            } else {
                 control.classList.add('none');
-            }, 3000);
-        } else {
-            control.classList.add('none');
-        }
+            }
+        });
     });
-});
     </script>
 </body>
 </html>

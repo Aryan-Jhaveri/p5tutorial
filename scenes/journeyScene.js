@@ -1,5 +1,7 @@
 class JourneyScene {
     constructor() {
+        this.sceneManager = this.sceneManager;
+
         // Initialize properties (formerly global variables)
         this.fft = null;
         this.song = null;

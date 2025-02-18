@@ -1,7 +1,12 @@
 let welcomeScene;
+// Global scene manager (we need this to be globally accessible)
+var mgr;
+
+// Define our WelcomeScene class (no need for welcomeScene variable)
 class WelcomeScene {
-  constructor() {
-    this.sceneManager = null;
+    constructor() {
+        //var sceneManager = sceneManager;
+        // Store reference to the scene manager
 
     // Visual elements
     this.stars = [];
@@ -576,17 +581,17 @@ class WelcomeScene {
 
       // Update all responsive elements
       this.stars.forEach(star => star.handleResize());
-      //clouds.forEach(cloud => cloud.handleResize());
-      //moon.handleResize();
+      this.clouds.forEach(cloud => cloud.handleResize());
+      this.moon.handleResize();
       
 
-      /** Update interface elements
-      buttonWidth = min(canvasw * VISUAL_SETTINGS.CANVAS.BUTTON_WIDTH_PERCENT,
-                       VISUAL_SETTINGS.CANVAS.MAX_BUTTON_WIDTH);
-      buttonHeight = min(canvash * VISUAL_SETTINGS.CANVAS.BUTTON_HEIGHT_PERCENT,
-                        VISUAL_SETTINGS.CANVAS.MAX_BUTTON_HEIGHT);
+      
+      buttonWidth = min(this.canvasw * this.VISUAL_SETTINGS.CANVAS.BUTTON_WIDTH_PERCENT,
+                       this.VISUAL_SETTINGS.CANVAS.MAX_BUTTON_WIDTH);
+      buttonHeight = min(this.canvash * this.VISUAL_SETTINGS.CANVAS.BUTTON_HEIGHT_PERCENT,
+                        this.VISUAL_SETTINGS.CANVAS.MAX_BUTTON_HEIGHT);
       updateButtonPosition();
-      */
+     
 
       /**Update wave boundaries
       yRange = {
@@ -597,28 +602,27 @@ class WelcomeScene {
     }
   
     mousePressed() {
+      // Debug logging to help track the issue
+      console.log('Mouse position:', `(${mouseX}, ${mouseY})`);
+      console.log('Button bounds:', 
+          `(${this.startButtonX}, ${this.startButtonY}) to ` +
+          `(${this.startButtonX + this.buttonWidth}, ${this.startButtonY + this.buttonHeight})`
+      );
+      
       if (this.isMouseOverButton()) {
-          console.log("Button clicked, initiating scene transition...");
+          console.log("Initiating scene transition...");
           
-          // Add error checking
-          if (!this.sceneManager) {
-              console.error('SceneManager not initialized in WelcomeScene');
-              return;
+          // Check if scene manager exists
+          if (this.sceneManager) {
+              // Transition to journey scene
+              this.sceneManager.switchScene('JOURNEY');
+          } else {
+              console.error('Scene manager not properly initialized');
           }
-          
-          // Use the scenes enum from SceneManager
-          this.sceneManager.switchScene(this.sceneManager.scenes.JOURNEY);
       }
+      return true; // Prevent event bubbling
   }
-
-  // Add debug method
-  debugSceneManager() {
-      console.log('SceneManager Status:', {
-          exists: !!this.sceneManager,
-          scenes: this.sceneManager ? Object.keys(this.sceneManager.scenes) : 'none',
-          currentScene: this.sceneManager ? this.sceneManager.getCurrentScene() : 'none'
-      });
-  }
+  
 
   /** 
     mousePressed() {
@@ -679,7 +683,7 @@ WelcomeScene.VISUAL_SETTINGS = {
       MAX_BUTTON_WIDTH: 200,
       MAX_BUTTON_HEIGHT: 60
     }
-  };
+  }
 
 function preload() {
   welcomeScene = new WelcomeScene();
